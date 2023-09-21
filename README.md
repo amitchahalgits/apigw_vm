@@ -5,16 +5,17 @@ sudo ifconfig lo0 alias 127.0.0.2
 sudo ifconfig lo0 alias 127.0.0.3
 sudo ifconfig lo0 alias 127.0.0.4
 ```
-
+The lab is run using separate shells/split terminals and setting export CONSUL_HTTP_TOKEN=127.0.0.XX:8500.
 
 ### Run server 
 `consul agent -config-file server.hcl`
 
 ### Run Client(running counting app)
 ```
+export CONSUL_HTTP_TOKEN=127.0.0.2:8500
 consul agent -config-file client.hcl
 consul services register counting.hcl
-consul connect envoy -sidecar-for counting -- -l debug
+consul connect envoy -sidecar-for counting -admin-bind 127.0.0.2:19000 -- -l debug
 ```
 // 
 Download counting for Mac arm64/amd64 from :
@@ -80,12 +81,13 @@ EOF
 
 ### Write the apigw and inline-certificate config entries:
 ```
+export CONSUL_HTTP_TOKEN=127.0.0.2:8500
 consul config write api-config-entry.hcl
 consul config write config-gateway-api-certificate.hcl
 ```
 
 ### Run envoy as api-gateway:
-`consul connect envoy -gateway api -register -service api-gw`
+`consul connect envoy -gateway api -register -service api-gw -admin-bind 127.0.0.3:19000 -- -l debug`
 
 ### Apply TCP route
 `consul config write config-gateway-api-tcp-route.hcl`
