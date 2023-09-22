@@ -1,30 +1,24 @@
-## Mac Loopback lab
-Create multiple Loopbacks:
-```
-sudo ifconfig lo0 alias 127.0.0.2
-sudo ifconfig lo0 alias 127.0.0.3
-sudo ifconfig lo0 alias 127.0.0.4
-```
-The lab is run using separate shells/split terminals and setting export CONSUL_HTTP_TOKEN=127.0.0.XX:8500.
+## APIGW VM lab
 
-### Run server 
+## Run server 
 `consul agent -config-file server.hcl`
 
-### Run Client(running counting app)
+## Run Client 1(running counting app)
 ```
-export CONSUL_HTTP_TOKEN=127.0.0.2:8500
 consul agent -config-file client.hcl
 consul services register counting.hcl
-consul connect envoy -sidecar-for counting -admin-bind 127.0.0.2:19000 -- -l debug
+consul connect envoy -sidecar-for counting -- -l debug
 ```
 // 
 Download counting for Mac arm64/amd64 from :
 https://github.com/hashicorp/demo-consul-101
 //
 
+### Run Counting App:
 `PORT=9003 ./counting-service_darwin_arm64`
 
-### Run Client(running apigw)
+
+## Run Client 2(running apigw)
 `consul agent -config-file apigw.hcl`
 
 ### create a config-file for openssl for Inline cert creation process:
@@ -39,7 +33,7 @@ countryName             = US
 stateOrProvinceName     = California
 localityName            = San Francisco
 organizationName        = HashiCorp
-commonName              = counting.hashicorp.com
+commonName              = counting.consul.local
 ```
 
 ### Generate private key:
@@ -81,9 +75,9 @@ EOF
 
 ### Write the apigw and inline-certificate config entries:
 ```
-export CONSUL_HTTP_TOKEN=127.0.0.2:8500
-consul config write api-config-entry.hcl
+consul config write config-gateway-api.hcl
 consul config write config-gateway-api-certificate.hcl
+
 ```
 
 ### Run envoy as api-gateway:

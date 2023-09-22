@@ -1,5 +1,5 @@
 Kind = "api-gateway"
-Name = "api-gw"
+Name = "gateway-api"
 
 Listeners = [
     {
@@ -16,4 +16,3 @@ Listeners = [
         }
     }
 ]
-

@@ -8,4 +8,4 @@ countryName             = US
 stateOrProvinceName     = California
 localityName            = San Francisco
 organizationName        = HashiCorp
-commonName              = counting.hashicorp.com
+commonName              = counting.consul.local
