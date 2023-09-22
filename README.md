@@ -5,7 +5,7 @@
 
 ## Run Client 1(running counting app)
 ```
-consul agent -config-file client.hcl
+consul agent -config-file client-count.hcl
 consul services register counting.hcl
 consul connect envoy -sidecar-for counting -- -l debug
 ```
@@ -19,9 +19,10 @@ https://github.com/hashicorp/demo-consul-101
 
 
 ## Run Client 2(running apigw)
-`consul agent -config-file apigw.hcl`
+`consul agent -config-file client-api.hcl`
 
 ### create a config-file for openssl for Inline cert creation process:
+`cat gateway-api-ca-config.cnf`
 ```
 [req]
 default_bit = 4096
@@ -81,7 +82,7 @@ consul config write config-gateway-api-certificate.hcl
 ```
 
 ### Run envoy as api-gateway:
-`consul connect envoy -gateway api -register -service api-gw -admin-bind 127.0.0.3:19000 -- -l debug`
+`consul connect envoy -gateway api -register -service gateway-api -- -l debug`
 
 ### Apply TCP route
 `consul config write config-gateway-api-tcp-route.hcl`
