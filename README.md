@@ -1,6 +1,6 @@
 ## APIGW VM lab
 ### Consul version: 1.16.1
-### Envoy version: 1.25.0
+### Envoy version: 1.25.9
 
 ## Run server 
 `consul agent -config-file server.hcl`
